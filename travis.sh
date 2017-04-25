@@ -157,7 +157,7 @@ SOURCE_PKGS=$(catkin_topological_order "$CI_SOURCE_PATH" --only-names)
 echo -e "Catkin packages in source repo: $SOURCE_PKGS"
 
 echo "--------------"
-TEST_PKGS=$(catkin_topological_order "$CI_SOURCE_PATH" --only-names | grep -Fvxf <(echo "$TEST_BLACKLIST" | tr ' ;,' '\n'))
+TEST_PKGS=$(catkin_topological_order "$CI_SOURCE_PATH" --only-names | grep -Fvxf <(echo "$TEST_BLACKLIST" | tr ' ;,' '\n') | tr '\n' ' ')
 if [ -n "$TEST_PKGS" ]; then
     TEST_PKGS="--no-deps $TEST_PKGS";
 fi
