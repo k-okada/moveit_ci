@@ -1,4 +1,4 @@
-#!/bin/bash
+#!/bin/bash -x
 
 # Software License Agreement - BSD License
 #
