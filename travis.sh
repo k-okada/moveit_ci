@@ -155,19 +155,19 @@ echo -e "Test blacklist: $TEST_BLACKLIST"
 echo "--------------"
 SOURCE_PKGS=$(catkin_topological_order "$CI_SOURCE_PATH" --only-names)
 echo -e "Catkin packages in source repo: $SOURCE_PKGS"
-
 echo "--------------"
 TEST_PKGS=$(catkin_topological_order "$CI_SOURCE_PATH" --only-names | grep -Fvxf <(echo "$TEST_BLACKLIST" | tr ' ;,' '\n') | tr '\n' ' ')
 if [ -n "$TEST_PKGS" ]; then
     TEST_PKGS="--no-deps $TEST_PKGS";
+    IFS=' ' read -r -a TEST_PKGS <<< "$TEST_PKGS"
 fi
 echo -e "Test packages: ${TEST_PKGS}"
 
 # Re-build workspace with tests
-travis_run catkin build --no-status --summarize --make-args tests -- $TEST_PKGS
+travis_run catkin build --no-status --summarize --make-args tests -- ${TEST_PKGS[@]}
 
 # Run tests
-travis_run catkin build --catkin-make-args run_tests -- --no-status --summarize $TEST_PKGS
+travis_run catkin build --catkin-make-args run_tests -- --no-status --summarize ${TEST_PKGS[@]}
 
 # Show test results and throw error if necessary
 travis_run catkin_test_results
