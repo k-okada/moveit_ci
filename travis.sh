@@ -153,8 +153,18 @@ travis_run source install/setup.bash;
 # Choose which packages to run tests on
 echo -e "Test blacklist: $TEST_BLACKLIST"
 echo "--------------"
+SOURCE_PKGS_=`catkin_topological_order "$CI_SOURCE_PATH" --only-names`
+echo -e "Catkin packages in source repo: $SOURCE_PKGS_"
+for var in $SOURCE_PKGS_
+do
+    echo "The length of argument '$var' is: ${#var}"
+done
 SOURCE_PKGS=$(catkin_topological_order "$CI_SOURCE_PATH" --only-names)
 echo -e "Catkin packages in source repo: $SOURCE_PKGS"
+for var in $SOURCE_PKGS
+do
+    echo "The length of argument '$var' is: ${#var}"
+done
 echo "--------------"
 TEST_PKGS=$(catkin_topological_order "$CI_SOURCE_PATH" --only-names | grep -Fvxf <(echo "$TEST_BLACKLIST" | tr ' ;,' '\n') | tr '\n' ' ')
 for var in $TEST_PKGS
