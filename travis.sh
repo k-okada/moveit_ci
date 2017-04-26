@@ -151,26 +151,64 @@ my_travis_wait 60 catkin build --no-status --summarize || exit 1
 travis_run source install/setup.bash;
 
 # Choose which packages to run tests on
+function hoge() {
+  local command=$@
+
+  echo $command
+for var in $command
+do
+    echo "  The length of argument '$var' is: ${#var}"
+done
+}
+function fuga() {
+  local command=$*
+
+  echo $command
+for var in $command
+do
+    echo "  The length of argument '$var' is: ${#var}"
+done
+}
+function hoga() {
+  local command="$@"
+
+  echo $command
+for var in $command
+do
+    echo "  The length of argument '$var' is: ${#var}"
+done
+}
+
 echo -e "Test blacklist: $TEST_BLACKLIST"
 echo "--------------"
 export SOURCE_PKGS_=`catkin_topological_order "$CI_SOURCE_PATH" --only-names`
 echo -e "Catkin packages in source repo: $SOURCE_PKGS_"
 for var in $SOURCE_PKGS_
 do
-    echo "The length of argument '$var' is: ${#var}"
+    echo " - The length of argument '$var' is: ${#var}"
 done
+hoge a b c $SOURCE_PKGS_
+fuga a b c $SOURCE_PKGS_
+hoga a b c $SOURCE_PKGS_
 export SOURCE_PKGS_=`catkin_topological_order ${CI_SOURCE_PATH} --only-names`
 echo -e "Catkin packages in source repo: $SOURCE_PKGS_"
 for var in $SOURCE_PKGS_
 do
-    echo "The length of argument '$var' is: ${#var}"
+    echo " - The length of argument '$var' is: ${#var}"
 done
+hoge a b c $SOURCE_PKGS_
+fuga a b c $SOURCE_PKGS_
+hoga a b c $SOURCE_PKGS_
 SOURCE_PKGS=$(catkin_topological_order "$CI_SOURCE_PATH" --only-names)
 echo -e "Catkin packages in source repo: $SOURCE_PKGS"
 for var in $SOURCE_PKGS
 do
-    echo "The length of argument '$var' is: ${#var}"
+    echo " - The length of argument '$var' is: ${#var}"
 done
+hoge a b c $SOURCE_PKGS
+fuga a b c $SOURCE_PKGS
+hoga a b c $SOURCE_PKGS
+
 echo "--------------"
 TEST_PKGS=$(catkin_topological_order "$CI_SOURCE_PATH" --only-names | grep -Fvxf <(echo "$TEST_BLACKLIST" | tr ' ;,' '\n') | tr '\n' ' ')
 for var in $TEST_PKGS
