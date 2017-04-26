@@ -157,8 +157,16 @@ SOURCE_PKGS=$(catkin_topological_order "$CI_SOURCE_PATH" --only-names)
 echo -e "Catkin packages in source repo: $SOURCE_PKGS"
 echo "--------------"
 TEST_PKGS=$(catkin_topological_order "$CI_SOURCE_PATH" --only-names | grep -Fvxf <(echo "$TEST_BLACKLIST" | tr ' ;,' '\n') | tr '\n' ' ')
+for var in $TEST_PKGS
+do
+    echo "The length of argument '$var' is: ${#var}"
+done
 if [ -n "$TEST_PKGS" ]; then
     TEST_PKGS="--no-deps $TEST_PKGS";
+for var in $TEST_PKGS
+do
+    echo "The length of argument '$var' is: ${#var}"
+done
     IFS=' ' read -r -a TEST_PKGS <<< "$TEST_PKGS"
 fi
 echo -e "Test packages: ${TEST_PKGS}"
